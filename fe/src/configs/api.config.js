@@ -1,8 +1,9 @@
-import {BASE_URL} from '@/constants';
+import {API_URI_V1} from '@/constants';
 import axios from 'axios';
 
-const httpRequest = axios.create({
-  baseURL: BASE_URL,
+const apiV1 = axios.create({
+  baseURL: API_URI_V1,
+  timeout: 1000 * 60,
 });
 
-export default httpRequest;
+export default apiV1;

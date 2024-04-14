@@ -9,7 +9,7 @@ interface ICustomTextInput {
   secureTextEntry?: boolean;
   value: string;
   onChangeText: (text: string) => void;
-  error: string;
+  error?: string;
   rightIcon?: IconNode;
 }
 

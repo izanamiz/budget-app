@@ -4,7 +4,7 @@ import Background1 from '@/assets/media/welcome/Background1.svg';
 import ColorfulLogo2 from '@/assets/media/welcome/ColorfulLogo2.svg';
 import RightArrow1 from '@/assets/media/redirect/RightArrow1.svg';
 import RightArrow2 from '@/assets/media/redirect/RightArrow2.svg';
-import {WINDOW_HEIGHT, WINDOW_WIDTH} from '@/constants/dimensions';
+import {WINDOW_WIDTH} from '@/constants/dimensions';
 import colors from '@/constants/colors';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenProps, Screens} from '@/navigation/screens';
