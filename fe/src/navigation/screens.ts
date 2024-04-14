@@ -10,6 +10,8 @@ enum Screens {
   SignUp = 'SignUp',
   SignIn = 'SignIn',
   Profile = 'Profile',
+  Expense = 'Expense',
+  Income = 'Income',
 }
 
 type RootStackParamList = {
@@ -22,6 +24,8 @@ type RootStackParamList = {
   [Screens.SignUp]: undefined;
   [Screens.SignIn]: undefined;
   [Screens.Profile]: undefined;
+  [Screens.Expense]: undefined;
+  [Screens.Income]: undefined;
 };
 
 type ScreenProps<

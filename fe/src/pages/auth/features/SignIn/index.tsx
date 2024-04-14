@@ -38,7 +38,7 @@ type Errors = {
 const SignIn: React.FC = () => {
   const {mutate: mutateStoredToken} = useSWR(TOKEN_KEY);
 
-  const navigation = useNavigation<ScreenProps<Screens.Tabs>['navigation']>();
+  const navigation = useNavigation<ScreenProps<Screens.SignIn>['navigation']>();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -56,9 +56,9 @@ const SignIn: React.FC = () => {
     navigation.navigate(Screens.SignUp);
   }, []);
 
-  const handleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const handleShowPassword = useCallback(() => {
+    setShowPassword(prev => !prev);
+  }, []);
 
   const handleValidation = useCallback(async () => {
     try {
@@ -135,7 +135,7 @@ const SignIn: React.FC = () => {
               </Pressable>
             }
           />
-        
+
           <Pressable style={styles.signUpWrapper} onPress={handleNavigate}>
             <Text style={styles.signUpText}>Don't have account. Sign up</Text>
             <RightArrow2 />

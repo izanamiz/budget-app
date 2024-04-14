@@ -43,7 +43,7 @@ type Errors = {
 };
 
 const SignUp: React.FC = () => {
-  const navigation = useNavigation<ScreenProps<Screens.Tabs>['navigation']>();
+  const navigation = useNavigation<ScreenProps<Screens.SignUp>['navigation']>();
 
   const [formData, setFormData] = useState<SignUpData>({
     name: '',
@@ -67,9 +67,9 @@ const SignUp: React.FC = () => {
     navigation.navigate(Screens.SignIn);
   }, []);
 
-  const handleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const handleShowPassword = useCallback(() => {
+    setShowPassword(prev => !prev);
+  }, []);
 
   const handleValidation = useCallback(async () => {
     try {

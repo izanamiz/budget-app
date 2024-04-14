@@ -5,6 +5,7 @@ export const saveToken = async (token: string) => {
   try {
     await AsyncStorage.setItem('token', token);
     apiV1.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    console.log(apiV1.defaults.headers.common['Authorization']);
   } catch (error) {
     console.error('Error saving token:', error);
   }

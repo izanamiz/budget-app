@@ -2,6 +2,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Screens} from './screens';
 import BottomTabNav from './BottomTabNav';
 import Profile from '@/pages/auth/features/Profile';
+import ExpenseScreen from '@/pages/transaction/features/Expense';
+import IncomeScreen from '@/pages/transaction/features/Income';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +18,16 @@ function AppNavigator() {
       initialRouteName={Screens.Tabs}>
       <Stack.Screen name={Screens.Tabs} component={BottomTabNav} />
       <Stack.Screen name={Screens.Profile} component={Profile} />
+      <Stack.Screen
+        name={Screens.Expense}
+        component={ExpenseScreen}
+        options={{presentation: 'modal'}}
+      />
+      <Stack.Screen
+        name={Screens.Income}
+        component={IncomeScreen}
+        options={{presentation: 'modal'}}
+      />
     </Stack.Navigator>
   );
 }
