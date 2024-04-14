@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {TypeENUM} from '@/services/categories/types';
 import {getAllCategories} from '@/services/categories';
 import colors from '@/constants/colors';
@@ -17,8 +17,15 @@ import DatePicker from '@/assets/media/common/DatePicker.svg';
 import Note from '@/assets/media/transaction/Note.svg';
 import BtnCancel from '../../components/BtnCancel';
 import BtnSave from '../../components/BtnSave';
+import CategoryModal from '../../components/CategoryModal';
 
 const IncomeScreen = () => {
+  const [visible, setVisible] = useState(false);
+
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
   const handlePress = useCallback(async () => {
     try {
       const data = await getAllCategories(TypeENUM.INCOME);
@@ -48,7 +55,9 @@ const IncomeScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={[styles.row, {gap: 8}]}>
+          <TouchableOpacity
+            style={[styles.row, {gap: 8}]}
+            onPress={toggleOverlay}>
             <View style={styles.categoryImg} />
             <Text style={[styles.text, styles.textBlue]}>Chọn hạng mục</Text>
           </TouchableOpacity>
@@ -82,6 +91,8 @@ const IncomeScreen = () => {
           <BtnSave backgroundColor={colors.green} />
         </View>
       </View>
+
+      <CategoryModal visible={visible} setVisible={setVisible} />
     </SafeAreaView>
   );
 };

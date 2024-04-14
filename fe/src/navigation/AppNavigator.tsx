@@ -18,16 +18,8 @@ function AppNavigator() {
       initialRouteName={Screens.Tabs}>
       <Stack.Screen name={Screens.Tabs} component={BottomTabNav} />
       <Stack.Screen name={Screens.Profile} component={Profile} />
-      <Stack.Screen
-        name={Screens.Expense}
-        component={ExpenseScreen}
-        options={{presentation: 'modal'}}
-      />
-      <Stack.Screen
-        name={Screens.Income}
-        component={IncomeScreen}
-        options={{presentation: 'modal'}}
-      />
+      <Stack.Screen name={Screens.Expense} component={ExpenseScreen} />
+      <Stack.Screen name={Screens.Income} component={IncomeScreen} />
     </Stack.Navigator>
   );
 }
