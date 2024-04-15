@@ -1,6 +1,5 @@
 import {
   Text,
-  StatusBar,
   SafeAreaView,
   View,
   TextInput,
@@ -11,7 +10,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import colors from '@/constants/colors';
 import Header from '../../components/Header';
 import BtnAddSvg from '@/assets/media/transaction/IncomeBtn.svg';
-import DatePicker from '@/assets/media/common/DatePicker.svg';
 import Note from '@/assets/media/transaction/Note.svg';
 import BtnCancel from '../../components/BtnCancel';
 import BtnSave from '../../components/BtnSave';
@@ -19,24 +17,25 @@ import {TransactionRequest} from '@/services/transactions/types';
 import {TypeENUM} from '@/services/categories/types';
 import CategoryItem from '../../components/CategoryItem';
 import {styles} from './style';
+import RNDatePicker from '../../components/RNDatePicker';
 
 const IncomeScreen = () => {
   const initialTransaction = {
     price: 0,
     type: TypeENUM.INCOME,
     categoryId: '',
+    scheduledAt: new Date(),
+    note: '',
   };
 
   const [transactions, setTransactions] = useState<TransactionRequest[]>([
-    {
-      price: 0,
-      type: TypeENUM.INCOME,
-      categoryId: '',
-    },
+    initialTransaction,
   ]);
 
   const [total, setTotal] = useState<number>(0);
   const [btnSaveDisabled, setBtnSaveDisabled] = useState(true);
+  const [date, setDate] = useState<Date>(new Date());
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     const totalPrice = transactions.reduce(
@@ -53,14 +52,35 @@ const IncomeScreen = () => {
     setBtnSaveDisabled(hasInvalidTransactions);
   }, [transactions]);
 
+  const handleChangeDescription = useCallback(() => {
+    setTransactions(prev => {
+      return prev.map((transaction: TransactionRequest) => {
+        return {
+          ...transaction,
+          note: description,
+        };
+      });
+    });
+  }, [transactions, description]);
+
   const handleAddNewTransaction = useCallback(() => {
     setTransactions(prev => [...prev, initialTransaction]);
   }, []);
 
+  const handleAddDateToTransactions = useCallback(() => {
+    setTransactions(prev => {
+      return prev.map((transaction: TransactionRequest) => {
+        return {
+          ...transaction,
+          scheduledAt: date,
+        };
+      });
+    });
+  }, [transactions, date]);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>
-        <StatusBar backgroundColor={colors.green} />
         <Header headerText={'Thu nhập mới'} backgroundColor={colors.green} />
 
         <View style={styles.container}>
@@ -84,17 +104,18 @@ const IncomeScreen = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.row}>
-            <TouchableOpacity style={[styles.row, {gap: 8}]}>
-              <DatePicker />
-              <Text style={[styles.text, styles.textBlue]}>01/03/2024</Text>
-            </TouchableOpacity>
-          </View>
+          <RNDatePicker type={TypeENUM.INCOME} date={date} setDate={setDate} />
 
           <View style={styles.row}>
             <TouchableOpacity style={[styles.row, {gap: 8}]}>
               <Note />
-              <TextInput placeholder="Ghi chú" style={styles.textinput} />
+              <TextInput
+                placeholder="Ghi chú"
+                style={styles.textinput}
+                value={description}
+                onChangeText={setDescription}
+                onEndEditing={handleChangeDescription}
+              />
             </TouchableOpacity>
           </View>
 
@@ -104,7 +125,8 @@ const IncomeScreen = () => {
             <BtnSave
               backgroundColor={colors.green}
               btnSaveDisabled={btnSaveDisabled}
-              transactions = {transactions}
+              transactions={transactions}
+              handlePress={handleAddDateToTransactions}
             />
           </View>
         </View>

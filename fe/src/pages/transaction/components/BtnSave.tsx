@@ -11,28 +11,31 @@ type BtnSaveFC = {
   backgroundColor: string;
   btnSaveDisabled: boolean;
   transactions: TransactionRequest[];
+  handlePress: () => void;
 };
 const BtnSave: React.FC<BtnSaveFC> = ({
   backgroundColor,
   btnSaveDisabled,
   transactions,
+  handlePress,
 }) => {
   const navigation =
     useNavigation<ScreenProps<Screens.Expense>['navigation']>();
 
   const handleSaveTransactions = useCallback(async () => {
     try {
+      handlePress();
       console.log(transactions);
       for (const transaction of transactions) {
-        const data = await createTransaction(transaction);
-        console.log('data: ', data);
+        await createTransaction(transaction);
       }
       successToast('All transactions saved successfully');
     } catch (error) {
       console.error('Error saving transactions:', error);
       errorToast('Error saving transactions');
+    } finally {
+      navigation.goBack();
     }
-    navigation.goBack();
   }, [transactions]);
 
   return (
