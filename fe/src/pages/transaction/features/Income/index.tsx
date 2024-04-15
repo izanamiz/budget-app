@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import colors from '@/constants/colors';
@@ -80,6 +81,7 @@ const IncomeScreen = () => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
+      <StatusBar backgroundColor={colors.green} />
       <ScrollView>
         <Header headerText={'Thu nhập mới'} backgroundColor={colors.green} />
 
@@ -120,7 +122,14 @@ const IncomeScreen = () => {
           </View>
 
           <View
-            style={[styles.row, {flex: 1, gap: 20, alignItems: 'flex-end'}]}>
+            style={[
+              styles.row,
+              {
+                marginTop: 30,
+                gap: 20,
+                alignItems: 'flex-end',
+              },
+            ]}>
             <BtnCancel />
             <BtnSave
               backgroundColor={colors.green}

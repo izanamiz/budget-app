@@ -53,7 +53,7 @@ const BtnSave: React.FC<BtnSaveFC> = ({
       <Text
         style={[
           styles.text,
-          {color: btnSaveDisabled ? colors.green : colors.white},
+          {color: btnSaveDisabled ? backgroundColor : colors.white},
         ]}>
         LƯU
       </Text>
