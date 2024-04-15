@@ -4,6 +4,7 @@ const colors = {
   green: '#4CB050',
   white: '#FFFFFF',
   black: '#000000',
+  darkGray:'#9B9B9B',
   gray: '#5F5F5F',
   lightGray: '#C8C8C8',
   btnDisable: '#D9D9D9',

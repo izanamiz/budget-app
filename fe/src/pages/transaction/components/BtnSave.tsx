@@ -3,20 +3,57 @@ import React, {useCallback} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenProps, Screens} from '@/navigation/screens';
 import colors from '@/constants/colors';
+import {TransactionRequest} from '@/services/transactions/types';
+import {createTransaction} from '@/services/transactions';
+import {errorToast, successToast} from '@/utils';
 
-const BtnSave = ({backgroundColor}: {backgroundColor: string}) => {
+type BtnSaveFC = {
+  backgroundColor: string;
+  btnSaveDisabled: boolean;
+  transactions: TransactionRequest[];
+};
+const BtnSave: React.FC<BtnSaveFC> = ({
+  backgroundColor,
+  btnSaveDisabled,
+  transactions,
+}) => {
   const navigation =
     useNavigation<ScreenProps<Screens.Expense>['navigation']>();
 
-  const handleSave = useCallback(() => {
+  const handleSaveTransactions = useCallback(async () => {
+    try {
+      console.log(transactions);
+      for (const transaction of transactions) {
+        const data = await createTransaction(transaction);
+        console.log('data: ', data);
+      }
+      successToast('All transactions saved successfully');
+    } catch (error) {
+      console.error('Error saving transactions:', error);
+      errorToast('Error saving transactions');
+    }
     navigation.goBack();
-  }, []);
+  }, [transactions]);
 
   return (
     <TouchableOpacity
-      style={[styles.container, {backgroundColor}]}
-      onPress={handleSave}>
-      <Text style={styles.text}>LƯU</Text>
+      disabled={btnSaveDisabled}
+      style={[
+        styles.container,
+        {
+          backgroundColor: btnSaveDisabled
+            ? colors.btnDisable
+            : backgroundColor,
+        },
+      ]}
+      onPress={handleSaveTransactions}>
+      <Text
+        style={[
+          styles.text,
+          {color: btnSaveDisabled ? colors.green : colors.white},
+        ]}>
+        LƯU
+      </Text>
     </TouchableOpacity>
   );
 };

@@ -1,15 +1,13 @@
 import {
   Text,
   StatusBar,
-  StyleSheet,
   SafeAreaView,
   View,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
-import React, {useCallback} from 'react';
-import {TypeENUM} from '@/services/categories/types';
-import {getAllCategories} from '@/services/categories';
+import React, {useCallback, useEffect, useState} from 'react';
 import colors from '@/constants/colors';
 import Header from '../../components/Header';
 import BtnAddSvg from '@/assets/media/transaction/IncomeBtn.svg';
@@ -17,115 +15,102 @@ import DatePicker from '@/assets/media/common/DatePicker.svg';
 import Note from '@/assets/media/transaction/Note.svg';
 import BtnCancel from '../../components/BtnCancel';
 import BtnSave from '../../components/BtnSave';
+import {TransactionRequest} from '@/services/transactions/types';
+import {TypeENUM} from '@/services/categories/types';
+import CategoryItem from '../../components/CategoryItem';
+import {styles} from './style';
 
 const ExpenseScreen = () => {
-  const handlePress = useCallback(async () => {
-    try {
-      const data = await getAllCategories(TypeENUM.EXPENSE);
-      console.log(data);
-    } catch (error) {
-      // console.log(error);
-    }
+  const initialTransaction = {
+    price: 0,
+    type: TypeENUM.EXPENSE,
+    categoryId: '',
+  };
+
+  const [transactions, setTransactions] = useState<TransactionRequest[]>([
+    {
+      price: 0,
+      type: TypeENUM.EXPENSE,
+      categoryId: '',
+    },
+  ]);
+
+  const [total, setTotal] = useState<number>(0);
+  const [btnSaveDisabled, setBtnSaveDisabled] = useState(true);
+
+  useEffect(() => {
+    const totalPrice = transactions.reduce(
+      (total, transaction) => total + transaction.price,
+      0,
+    );
+    setTotal(totalPrice);
+  }, [transactions]);
+
+  useEffect(() => {
+    const hasInvalidTransactions = transactions.some(
+      transaction => !transaction.categoryId || transaction.price <= 0,
+    );
+    setBtnSaveDisabled(hasInvalidTransactions);
+  }, [transactions]);
+
+  const handleAddNewTransaction = useCallback(() => {
+    setTransactions(prev => [...prev, initialTransaction]);
   }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <StatusBar backgroundColor={colors.red} />
-      <Header headerText={'Chi phí mới'} backgroundColor={colors.red} />
+      <ScrollView>
+        <StatusBar backgroundColor={colors.red} />
+        <Header headerText={'Chi phí mới'} backgroundColor={colors.red} />
 
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <View style={[styles.row, {flex: 1}]}>
-            <TextInput placeholder="Giá trị" style={styles.textinput} />
-            <Text style={styles.text}>đ</Text>
+        <View style={styles.container}>
+          {transactions.map((item: TransactionRequest, index: number) => (
+            <CategoryItem
+              key={index}
+              index={index}
+              setTransactions={setTransactions}
+              type={TypeENUM.EXPENSE}
+            />
+          ))}
+
+          <View style={styles.row}>
+            <TouchableOpacity style={[styles.row, styles.center]}>
+              <Text style={styles.text}>Tổng cộng: {total} đ</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btnAdd}
+              onPress={handleAddNewTransaction}>
+              <BtnAddSvg width={18} height={18} />
+            </TouchableOpacity>
           </View>
 
-          <View style={{flex: 1}}>
-            <Text style={[styles.text, {textAlign: 'right'}]}>
-              Không có ngân sách
-            </Text>
+          <View style={styles.row}>
+            <TouchableOpacity style={[styles.row, {gap: 8}]}>
+              <DatePicker />
+              <Text style={[styles.text, styles.textBlue]}>01/03/2024</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.row}>
+            <TouchableOpacity style={[styles.row, {gap: 8}]}>
+              <Note />
+              <TextInput placeholder="Ghi chú" style={styles.textinput} />
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={[styles.row, {flex: 1, gap: 20, alignItems: 'flex-end'}]}>
+            <BtnCancel />
+            <BtnSave
+              backgroundColor={colors.red}
+              btnSaveDisabled={btnSaveDisabled}
+              transactions={transactions}
+            />
           </View>
         </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.row, {gap: 8}]}>
-            <View style={styles.categoryImg} />
-            <Text style={[styles.text, styles.textBlue]}>Chọn hạng mục</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.row, styles.center]}>
-            <Text style={styles.text}>Tổng cộng: 0,00 đ</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnAdd}>
-            <BtnAddSvg width={18} height={18} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.row, {gap: 8}]}>
-            <DatePicker />
-            <Text style={[styles.text, styles.textBlue]}>01/03/2024</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.row, {gap: 8}]}>
-            <Note />
-            <TextInput placeholder="Ghi chú" style={styles.textinput} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={[styles.row, {flex: 1, gap: 20, alignItems: 'flex-end'}]}>
-          <BtnCancel />
-          <BtnSave backgroundColor={colors.red} />
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 30,
-    gap: 15,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  text: {
-    color: colors.black,
-    fontFamily: 'SF-Pro-Display-Regular',
-    fontSize: 16,
-  },
-  textinput: {
-    borderBottomColor: colors.lightGray,
-    borderBottomWidth: 1,
-    flex: 1,
-  },
-  categoryImg: {
-    backgroundColor: colors.btnDisable,
-    width: 28,
-    height: 28,
-    borderRadius: 28,
-  },
-  btnAdd: {
-    backgroundColor: colors.red,
-    width: 28,
-    height: 28,
-    borderRadius: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  textBlue: {
-    color: colors.blue,
-  },
-});
+
 export default ExpenseScreen;
