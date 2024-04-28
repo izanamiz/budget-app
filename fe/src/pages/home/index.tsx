@@ -14,6 +14,8 @@ import colors from '@/constants/colors';
 import {removeToken} from '@/utils';
 import useSWR from 'swr';
 import {TOKEN_KEY} from '@/constants';
+import {Card} from '@rneui/base';
+import TransactionHistory from './TransactionHistory';
 
 const HomeScreen = () => {
   const {mutate: mutateStoredToken} = useSWR(TOKEN_KEY);
@@ -31,7 +33,26 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>HomeScreen</Text>
+      <View
+        style={{
+          width: '100%',
+          height: '30%',
+          backgroundColor: colors.blue,
+          borderBottomRightRadius: 50,
+          borderBottomLeftRadius: 50,
+          padding: 30,
+          justifyContent: 'center',
+        }}>
+        <Text
+          style={{
+            color: colors.white,
+            fontFamily: 'SF-Pro-Display-Bold',
+            fontSize: 22,
+          }}>
+          Good morning
+        </Text>
+      </View>
+      <TransactionHistory />
       <View style={styles.logoutContainer}>
         <TouchableOpacity
           style={[styles.btnContainer, styles.btnLogout]}
@@ -55,7 +76,6 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
   },
   btnGroup: {
     position: 'absolute',

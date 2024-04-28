@@ -120,26 +120,27 @@ const ExpenseScreen = () => {
               />
             </TouchableOpacity>
           </View>
-
-          <View
-            style={[
-              styles.row,
-              {
-                marginTop: 30,
-                gap: 20,
-                alignItems: 'flex-end',
-              },
-            ]}>
-            <BtnCancel />
-            <BtnSave
-              backgroundColor={colors.red}
-              btnSaveDisabled={btnSaveDisabled}
-              transactions={transactions}
-              handlePress={handleAddDateToTransactions}
-            />
-          </View>
         </View>
       </ScrollView>
+      <View style={{position: 'absolute', left: 30, bottom: 30, right: 30}}>
+        <View
+          style={[
+            styles.row,
+            {
+              marginTop: 30,
+              gap: 20,
+              alignItems: 'flex-end',
+            },
+          ]}>
+          <BtnCancel />
+          <BtnSave
+            backgroundColor={colors.red}
+            btnSaveDisabled={btnSaveDisabled}
+            transactions={transactions}
+            handlePress={handleAddDateToTransactions}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };

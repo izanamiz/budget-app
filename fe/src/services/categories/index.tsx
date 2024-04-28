@@ -25,4 +25,15 @@ const getAllCategoriesByType = async (
   }
 };
 
-export {getAllCategories, getAllCategoriesByType};
+const getDetailCategory = async (id: string): Promise<CategoryResponse> => {
+  try {
+    const endpoint = `/categories/${id}`;
+    const res = await apiV1.get(endpoint);
+    return res.data.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Get all categories failed');
+  }
+};
+
+export {getAllCategories, getAllCategoriesByType, getDetailCategory};

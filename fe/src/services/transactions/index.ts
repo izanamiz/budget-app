@@ -9,8 +9,18 @@ const createTransaction = async (
     return response.data.data as TransactionResponse;
   } catch (error) {
     console.error(error);
-    throw new Error('Wrong email or password');
+    throw new Error('create transaction failed');
   }
 };
 
-export {createTransaction};
+const getAllTransactions = async (): Promise<TransactionResponse[]> => {
+  try {
+    const response = await apiV1.get('/transaction');
+    return response.data.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('get all transactions failed');
+  }
+};
+
+export {createTransaction, getAllTransactions};
